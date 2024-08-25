@@ -3,17 +3,3 @@
   padding: 0;
   --error-color: red;
 }
-
-.form input:invalid {
-  border-color: var(--error-color);
-}
-
-.form fieldset {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form fieldset > * {
-
-}

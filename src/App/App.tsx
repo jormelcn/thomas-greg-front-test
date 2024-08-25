@@ -5,6 +5,8 @@ import { HomePage } from "src/pages/HomePage";
 import { LoginPage } from "src/pages/LoginPage";
 import { LogoutPage } from "src/pages/LogoutPage/LogoutPage";
 import "./App.css";
+import "./Button.css";
+import "./Form.css";
 
 export function App() {
   return (
