@@ -1,0 +1,20 @@
+.page {
+  display: flex;
+  width: 100vw;
+  min-height: 100lvh;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 20rem;
+  box-sizing: border-box;
+  height: fit-content;
+  padding: 1rem;
+}
+
+.form {
+
+}
+
