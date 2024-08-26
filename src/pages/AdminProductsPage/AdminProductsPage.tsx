@@ -1,8 +1,8 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { MdEditSquare } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ProductForAdminDTO } from "src/api/dtos";
 import { useSearchProducts } from "src/api/useSearchProducts";
+import { useStoreService } from "src/api/useStoreService";
 import { AnimatedPanel } from "src/components/AnimatedPanel";
 import { Button } from "src/components/Button";
 import { PaginatedTable } from "src/components/PaginatedTable";
@@ -27,13 +27,16 @@ export interface ProductRow {
 
 export function AdminProductPage() {
   const navigate = useNavigate();
+  const storeService = useStoreService();
   const [openInfoPanel, setOpenInfoPanel] = useState(false);
   const [openFormPanel, setOpenFormPanel] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<
-    ProductForAdminDTO | undefined
-  >();
+  const [loading, setLoading] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<string | undefined>();
+  // const [selectedItem, setSelectedItem] = useState<
+  //   ProductForAdminDTO | undefined
+  // >();
   const [searchParams] = useSearchParams();
-  const { data, error, isValidating } = useSearchProducts({
+  const { data, error, isValidating, mutate } = useSearchProducts({
     page: parseInt(searchParams.get("page") ?? "0"),
   });
 
@@ -81,17 +84,10 @@ export function AdminProductPage() {
     },
   ]);
 
-  const onCellClick = (cellIndex: ITableCellIndex<ProductRow>) => {
-    setSelectedCell(cellIndex);
-    const selectedItem = data?.content!.find((x) => x.id === cellIndex.rowId);
-    setSelectedItem(selectedItem);
-    setOpenInfoPanel(true);
-  };
-
   const onEditClick = useCallback(
     (productId: string) => {
       const selectedItem = data?.content!.find((x) => x.id === productId);
-      setSelectedItem(selectedItem);
+      setSelectedItemId(selectedItem?.id);
       if (selectedItem) {
         setOpenFormPanel(true);
         setOpenInfoPanel(true);
@@ -122,6 +118,17 @@ export function AdminProductPage() {
     [data?.content, onEditClick]
   );
 
+  const selectedItem = useMemo(() => {
+    return data?.content!.find((x) => x.id === selectedItemId);
+  }, [selectedItemId, data?.content]);
+
+  const onCellClick = (cellIndex: ITableCellIndex<ProductRow>) => {
+    setSelectedCell(cellIndex);
+    const selectedItem = data?.content!.find((x) => x.id === cellIndex.rowId);
+    setSelectedItemId(selectedItem?.id);
+    setOpenInfoPanel(true);
+  };
+
   const onPageChange = (page: number) => {
     const url = new URL(location.href);
     url.searchParams.set("page", page.toString());
@@ -136,6 +143,34 @@ export function AdminProductPage() {
       currency: selectedItem.unitPrice!.currency,
     };
   }, [selectedItem]);
+
+  const callUpdateApi = async (value: ProductFormValue) => {
+    if (!selectedItem) return;
+    setLoading(true);
+    const result = await storeService.updateProduct({
+      id: selectedItem!.id,
+      name: value.name,
+      unitPrice: {
+        amount: parseFloat(value.unitPrice),
+        currency: value.currency,
+      },
+    });
+    setLoading(false);
+    if (result.isSuccess) {
+      mutate();
+      alert("Producto guardado");
+    } else if (result.status == 403) {
+      alert("Acceso no autorizado");
+    } else {
+      alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
+    }
+  };
+
+  const onFormSubmit = (value: ProductFormValue) => {
+    if (selectedItem) {
+      callUpdateApi(value);
+    }
+  };
 
   return (
     <div className={style.root}>
@@ -169,7 +204,12 @@ export function AdminProductPage() {
         onClose={() => setOpenFormPanel(false)}
       >
         <div className={style.panelContent}>
-          <ProductForm key={selectedItem?.id} initValue={initFormValue} />
+          <ProductForm
+            onValidSubmit={onFormSubmit}
+            key={selectedItem?.id}
+            initValue={initFormValue}
+            loading={loading}
+          />
         </div>
       </AnimatedPanel>
     </div>
