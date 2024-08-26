@@ -69,7 +69,7 @@ export class StoreService {
     return (url: string) =>
       this.client
         .request<T>({ method: "GET", route: url })
-        .then((x) => (x.isSuccess ? x.body : Promise.reject(x.body)));
+        .then((x) => (x.isSuccess ? x.body : Promise.reject(x)));
   }
 
   async searchProducts(
