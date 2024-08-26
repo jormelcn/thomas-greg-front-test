@@ -7,6 +7,7 @@ export interface IButtonProps {
   variant: "contained" | "text";
   className?: string;
   children?: ReactNode;
+  type?: "button" | "submit";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -14,6 +15,7 @@ export const Button = (props: IButtonProps) => {
   const { children, loading, variant, disabled } = props;
   return (
     <button
+      type={props.type}
       onClick={props.onClick}
       className={classNames(
         "btn",
