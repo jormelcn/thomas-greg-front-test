@@ -1,0 +1,42 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.menuItemIcon {
+  color: var(--color-primary);
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.iconArrow {
+  color: var(--color-primary);
+}
+
+.itemsContainer {
+  --btn-font-size: 0.9rem;
+  background-color: var(--paper-background-color);
+}
+
+.itemsContainer ul {
+  list-style-type: none;
+  padding: 1rem 0 1rem 0;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.itemsContainer li {
+  margin: 0;
+  color: var(--color-full-dark);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.itemsContainer li > :nth-child(2) {
+  flex-grow: 1;
+}
