@@ -5,10 +5,12 @@
  * OpenAPI spec version: v0
  */
 
+export * from './adminCreateProductRequestDTO';
 export * from './adminCreateUserRequestDTO';
 export * from './adminSearchProductsRequestDTO';
 export * from './adminSearchProductsRequestDTOSortDirection';
 export * from './adminSearchProductsRequestDTOSortField';
+export * from './adminUpdateProductRequestDTO';
 export * from './adminUpdateUserRequestDTO';
 export * from './moneyDTO';
 export * from './ownUserDTO';
