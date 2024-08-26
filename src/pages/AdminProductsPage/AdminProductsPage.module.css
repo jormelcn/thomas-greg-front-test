@@ -30,3 +30,7 @@
   height: 1rem;
   vertical-align: middle;
 }
+
+.panelContent {
+  padding-top: 2.5rem;
+}

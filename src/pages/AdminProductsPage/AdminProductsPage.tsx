@@ -1,10 +1,15 @@
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { MdEditSquare } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { ProductForAdminDTO } from "src/api/dtos";
 import { useSearchProducts } from "src/api/useSearchProducts";
 import { AnimatedPanel } from "src/components/AnimatedPanel";
 import { Button } from "src/components/Button";
 import { PaginatedTable } from "src/components/PaginatedTable";
+import {
+  ProductForm,
+  ProductFormValue,
+} from "src/components/ProductForm/ProductForm";
 import { ITableCellIndex, ITableColumn } from "src/components/Table";
 import { formatMoney } from "src/format/formatMoney";
 import isoStringDateToHumanDateTime from "src/format/isoStringDateToHumanDateTime";
@@ -21,29 +26,24 @@ export interface ProductRow {
 
 export function AdminProductPage() {
   const navigate = useNavigate();
+  const [openInfoPanel, setOpenInfoPanel] = useState(false);
+  const [openFormPanel, setOpenFormPanel] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<
+    ProductForAdminDTO | undefined
+  >();
   const [searchParams] = useSearchParams();
-  const { data, isValidating } = useSearchProducts({
+  const { data, error, isValidating } = useSearchProducts({
     page: parseInt(searchParams.get("page") ?? "0"),
   });
-  const [openInfoPanel, setOpenInfoPanel] = useState(false);
 
-  // const callSearchApi = useCallback(async () => {
-  //   const result = await storeService.searchProducts({
-  //     page: 0,
-  //   });
-
-  //   if (result.isSuccess) {
-  //     console.log(result);
-  //   } else if (result.status == 403) {
-  //     alert("Acceso no autorizado");
-  //   } else {
-  //     alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
-  //   }
-  // }, [storeService]);
-
-  // useEffect(() => {
-  //   callSearchApi();
-  // }, [callSearchApi]);
+  useEffect(() => {
+    if (!error) return;
+    if (error.status == 403) {
+      alert("Acceso no autorizado");
+    } else {
+      alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
+    }
+  }, [error]);
 
   const [selectedCell, setSelectedCell] = useState<
     undefined | ITableCellIndex<ProductRow>
@@ -80,6 +80,25 @@ export function AdminProductPage() {
     },
   ]);
 
+  const onCellClick = (cellIndex: ITableCellIndex<ProductRow>) => {
+    setSelectedCell(cellIndex);
+    const selectedItem = data?.content!.find((x) => x.id === cellIndex.rowId);
+    setSelectedItem(selectedItem);
+    setOpenInfoPanel(true);
+  };
+
+  const onEditClick = useCallback(
+    (productId: string) => {
+      const selectedItem = data?.content!.find((x) => x.id === productId);
+      setSelectedItem(selectedItem);
+      if (selectedItem) {
+        setOpenFormPanel(true);
+        setOpenInfoPanel(true);
+      }
+    },
+    [data?.content]
+  );
+
   const values = useMemo<ProductRow[]>(
     () =>
       data?.content!.map((x) => ({
@@ -93,26 +112,29 @@ export function AdminProductPage() {
             className={style.actionButtonsContainer}
             onClick={(evt) => evt.stopPropagation()}
           >
-            <Button variant="text" onClick={() => {}}>
+            <Button variant="text" onClick={() => onEditClick(x.id!)}>
               <MdEditSquare />
             </Button>
           </span>
         ),
       })) ?? [],
-    [data?.content]
+    [data?.content, onEditClick]
   );
-
-  const onCellClick = (cellIndex: ITableCellIndex<ProductRow>) => {
-    setSelectedCell(cellIndex);
-    // setSelectedJobOffer(jobOffers?.find(x => x.id === cellIndex.rowId));
-    setOpenInfoPanel(true);
-  };
 
   const onPageChange = (page: number) => {
     const url = new URL(location.href);
     url.searchParams.set("page", page.toString());
     navigate({ search: url.search.substring(1) });
   };
+
+  const initFormValue = useMemo<ProductFormValue | undefined>(() => {
+    if (!selectedItem) return undefined;
+    return {
+      name: selectedItem.name!,
+      unitPrice: selectedItem.unitPrice!.amount.toString(),
+      currency: selectedItem.unitPrice!.currency,
+    };
+  }, [selectedItem]);
 
   return (
     <div className={style.root}>
@@ -133,6 +155,7 @@ export function AdminProductPage() {
       </main>
       <AnimatedPanel
         open={openInfoPanel}
+        side="left"
         onClose={() => setOpenInfoPanel(false)}
       >
         <div></div>
@@ -147,6 +170,15 @@ export function AdminProductPage() {
           ) : (
             <></>
           )} */}
+      </AnimatedPanel>
+      <AnimatedPanel
+        open={openFormPanel}
+        side="right"
+        onClose={() => setOpenFormPanel(false)}
+      >
+        <div className={style.panelContent}>
+          <ProductForm key={selectedItem?.id} initValue={initFormValue} />
+        </div>
       </AnimatedPanel>
     </div>
   );
