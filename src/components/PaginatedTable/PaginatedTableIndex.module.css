@@ -1,0 +1,34 @@
+.root {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.3rem 1rem;
+  font-size: 1.1rem;
+}
+
+.indexContainer {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.indexContainer>* {
+  padding: 0 0.3rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  width: 2rem;
+  text-align: center;
+  user-select: none;
+}
+
+.indexContainer button {
+  font-weight: normal;
+}
+
+.indexContainer>*:hover {
+  background-color: rgba(var(--color-secondary-rgb), 0.3);
+}
+
+button.selectedIndex {
+  color: var(--color-primary);
+  font-weight: bold;
+}

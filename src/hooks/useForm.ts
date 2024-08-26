@@ -4,10 +4,11 @@ export interface useFormProps<T> {
   onValidSubmit?: (value: T) => void;
   onErrorSubmit?: (value: T) => void;
   onChange?: (value: T) => void;
+  initValue?: T;
 }
 
 export function useForm<T>(props?: useFormProps<T>) {
-  const [value, setValue] = useState<object>({});
+  const [value, setValue] = useState<object>(props?.initValue ?? {});
 
   useEffect(() => {
     if (props?.onChange) {
@@ -15,12 +16,16 @@ export function useForm<T>(props?: useFormProps<T>) {
     }
   }, [value, props]);
 
-  const handleChangeEvent = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeEvent = (
+    evt: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value: fieldValue } = evt.target;
     setValue((v) => ({ ...v, [name]: fieldValue }));
   };
 
-  const handleEvent = (evt: FormEvent<HTMLInputElement>) => {
+  const handleEvent = (
+    evt: FormEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     if (evt.type === "change") {
       handleChangeEvent(evt as ChangeEvent<HTMLInputElement>);
     }

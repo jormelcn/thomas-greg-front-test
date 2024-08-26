@@ -10,4 +10,5 @@ export interface GenericRequest<B = object | FormData | string>
   authorization?: string | null;
   contentType?: string;
   headers?: { [key: string]: string };
+  query?: { [key: string]: string | number };
 }

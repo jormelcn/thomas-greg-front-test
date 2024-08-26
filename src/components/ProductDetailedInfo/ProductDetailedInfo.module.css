@@ -1,0 +1,17 @@
+.root {
+  padding: 0 1rem;
+}
+
+.root h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.root h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.1rem;
+}
+
+.root p {
+  margin: 0;
+}

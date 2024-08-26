@@ -1,0 +1,64 @@
+:root,
+#root {
+  --app-header-height: 0;
+  --error-color: red;
+  --color-paper: #242424;
+  --text-color: rgba(255, 255, 255, 0.87);
+
+
+  --color-primary: #563DFF;
+  --color-primary-rgb: 86, 61, 255;
+  --color-primary-contrast: #FFFFFF;
+  --color-secondary: #55D6B8;
+  --color-secondary-rgb: 85, 214, 184;
+  --color-secondary-contrast: #FFFFFF;
+  --color-tertiary: #40C3EF;
+  --color-tertiary-rgb: 64, 195, 239;
+  --color-tertiary-contrast: #FFFFFF;
+  --color-light: #FFFFFF;
+  --color-light-dark: #F6F6F6;
+  --color-full-dark: #000000;
+  --color-dark: #202020;
+  --color-dark-light: #606060;
+  --color-dark-rgb: 32, 32, 32;
+  --color-success: #2BAA09;
+  --color-error: #F24B4B;
+  --color-warning: #ff8000;
+  --color-warning-rgb: 255, 128, 0;
+  --color-warning-contrast: #FFFFFF;
+  --color-disabled: #c0c0c0;
+  --color-disabled-contrast: #404040;
+
+  --default-border-color: #e0e0e0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root,
+  #root {
+    --color-paper: #ffffff;
+    --text-color: #213547;
+  }
+}
+
+
+:root,
+#root {
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  background-color: var(--color-paper);
+  color-scheme: light dark;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+

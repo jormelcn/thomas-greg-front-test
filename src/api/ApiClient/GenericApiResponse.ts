@@ -1,18 +1,18 @@
-interface GenericSuccessResponse<T = object> {
+export interface GenericSuccessResponse<T = object> {
   status: number;
   isSuccess: true;
   isNetworkError: false;
   body: T;
 }
 
-interface FailedResponse<T = object> {
+export interface FailedResponse<T = object> {
   status: number;
   isSuccess: false;
   isNetworkError: false;
   body: T;
 }
 
-interface NetworkErrorResponse {
+export interface NetworkErrorResponse {
   status: null;
   isSuccess: false;
   isNetworkError: true;

@@ -29,12 +29,12 @@ export function LoginPage() {
       });
       setLoading(false);
       if (result.isSuccess) {
-        navigate("/admin");
+        navigate("/admin/products");
       } else {
-        if (result.status == 403) {
+        if (result.status == 401) {
           alert("Error al iniciar sesión, verifica tu usuario y contraseña");
         } else {
-          alert("Lo sentimis, encontramos un inesperado en nuestros servicios");
+          alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
         }
       }
     },
@@ -99,7 +99,7 @@ export function LoginPage() {
                   required
                 />
               </div>
-              <div>
+              <div className="center">
                 <button
                   type="submit"
                   className={classNames("btn", loading && "loading")}
