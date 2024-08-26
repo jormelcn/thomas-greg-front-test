@@ -99,7 +99,7 @@ export function LoginPage() {
                   required
                 />
               </div>
-              <div>
+              <div className="center">
                 <button
                   type="submit"
                   className={classNames("btn", loading && "loading")}

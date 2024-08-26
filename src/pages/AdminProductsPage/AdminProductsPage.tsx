@@ -6,6 +6,7 @@ import { useSearchProducts } from "src/api/useSearchProducts";
 import { AnimatedPanel } from "src/components/AnimatedPanel";
 import { Button } from "src/components/Button";
 import { PaginatedTable } from "src/components/PaginatedTable";
+import { ProductDetailedInfo } from "src/components/ProductDetailedInfo";
 import {
   ProductForm,
   ProductFormValue,
@@ -158,18 +159,9 @@ export function AdminProductPage() {
         side="left"
         onClose={() => setOpenInfoPanel(false)}
       >
-        <div></div>
-        {/* {selectedJobOffer != null
-          ? (
-            <div style={{ padding: "1rem 1rem" }} >
-              <h1 style={{ color: "var(--color-primary)", textAlign: "center" }}>
-                Oferta laboral
-              </h1>
-              <JobOfferDetail jobOffer={selectedJobOffer} />
-            </div>
-          ) : (
-            <></>
-          )} */}
+        <div className={style.panelContent}>
+          {selectedItem && <ProductDetailedInfo product={selectedItem} />}
+        </div>
       </AnimatedPanel>
       <AnimatedPanel
         open={openFormPanel}
