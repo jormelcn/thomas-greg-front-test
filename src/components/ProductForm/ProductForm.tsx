@@ -6,6 +6,7 @@ export interface ProductFormValue {
   name: string;
   unitPrice: string;
   currency: string;
+  imageUrl: string;
 }
 
 export interface ProductFormProps {
@@ -49,7 +50,8 @@ export function ProductForm(props: ProductFormProps) {
           </label>
           <input
             id="product-form-unit-price"
-            type="string"
+            type="number"
+            step="0.01"
             name="unitPrice"
             onChange={handleEvent}
             value={value.unitPrice ?? ""}
@@ -71,6 +73,19 @@ export function ProductForm(props: ProductFormProps) {
             <option value="COP">COP</option>
             <option value="USD">USD</option>
           </select>
+        </div>
+        <div>
+          <label htmlFor="product-form-unit-price"  className="required">URL imágen</label>
+          <input
+            id="product-form-image-url"
+            type="string"
+            name="imageUrl"
+            onChange={handleEvent}
+            value={value.imageUrl ?? ""}
+            required
+            pattern="^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$"
+            
+          />
         </div>
         <div className="center">
           <Button

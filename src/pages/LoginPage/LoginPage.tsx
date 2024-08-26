@@ -29,7 +29,7 @@ export function LoginPage() {
       });
       setLoading(false);
       if (result.isSuccess) {
-        navigate("/admin");
+        navigate("/admin/products");
       } else {
         if (result.status == 401) {
           alert("Error al iniciar sesión, verifica tu usuario y contraseña");

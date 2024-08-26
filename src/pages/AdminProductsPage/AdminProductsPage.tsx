@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { MdEditSquare } from "react-icons/md";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useSearchProducts } from "src/api/useSearchProducts";
 import { useStoreService } from "src/api/useStoreService";
 import { AnimatedPanel } from "src/components/AnimatedPanel";
@@ -23,6 +24,7 @@ export interface ProductRow {
   statusColor: ReactNode;
   creationTime: ReactNode;
   actions: ReactNode;
+  imageUrl: ReactNode;
 }
 
 export function AdminProductPage() {
@@ -32,9 +34,6 @@ export function AdminProductPage() {
   const [openFormPanel, setOpenFormPanel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState<string | undefined>();
-  // const [selectedItem, setSelectedItem] = useState<
-  //   ProductForAdminDTO | undefined
-  // >();
   const [searchParams] = useSearchParams();
   const { data, error, isValidating, mutate } = useSearchProducts({
     page: parseInt(searchParams.get("page") ?? "0"),
@@ -82,6 +81,12 @@ export function AdminProductPage() {
       width: 200,
       cellWidth: 200,
     },
+    {
+      Header: "URL Imágen",
+      accessor: "imageUrl",
+      width: 300,
+      cellWidth: 300,
+    },
   ]);
 
   const onEditClick = useCallback(
@@ -104,6 +109,7 @@ export function AdminProductPage() {
         unitPrice: formatMoney(x.unitPrice!),
         statusColor: <div></div>,
         creationTime: isoStringDateToHumanDateTime(x.createdDate!),
+        imageUrl: <Link to={x.previewImageURL ?? ""}>{x.previewImageURL}</Link>,
         actions: (
           <span
             className={style.actionButtonsContainer}
@@ -141,6 +147,7 @@ export function AdminProductPage() {
       name: selectedItem.name!,
       unitPrice: selectedItem.unitPrice!.amount.toString(),
       currency: selectedItem.unitPrice!.currency,
+      imageUrl: selectedItem.previewImageURL ?? "",
     };
   }, [selectedItem]);
 
@@ -154,11 +161,38 @@ export function AdminProductPage() {
         amount: parseFloat(value.unitPrice),
         currency: value.currency,
       },
+      previewImageURL: value.imageUrl,
     });
     setLoading(false);
     if (result.isSuccess) {
       mutate();
       alert("Producto guardado");
+    } else if (result.status == 403) {
+      alert("Acceso no autorizado");
+    } else if (result.status == 400) {
+      alert("Informacion incorrecta, verifica los valores ingresados");
+    } else {
+      alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
+    }
+  };
+
+  const callCreateApi = async (value: ProductFormValue) => {
+    if (selectedItem) return;
+    setLoading(true);
+    const result = await storeService.createProduct({
+      name: value.name,
+      unitPrice: {
+        amount: parseFloat(value.unitPrice),
+        currency: value.currency,
+      },
+      previewImageURL: value.imageUrl,
+    });
+    setLoading(false);
+    if (result.isSuccess) {
+      mutate();
+      alert("Producto guardado");
+    } else if (result.status == 400) {
+      alert("Informacion incorrecta, verifica los valores ingresados");
     } else if (result.status == 403) {
       alert("Acceso no autorizado");
     } else {
@@ -169,12 +203,31 @@ export function AdminProductPage() {
   const onFormSubmit = (value: ProductFormValue) => {
     if (selectedItem) {
       callUpdateApi(value);
+    } else {
+      callCreateApi(value);
     }
+  };
+
+  const onCreateButtonClick = () => {
+    setSelectedItemId(undefined);
+    setOpenFormPanel(true);
   };
 
   return (
     <div className={style.root}>
-      <header></header>
+      <header>
+        <h1>Productos registrados</h1>
+        <div className={style.topSectionActionsRow}>
+          <Button
+            variant="text"
+            className={style.topSectionActionButton}
+            onClick={onCreateButtonClick}
+          >
+            <AiOutlinePlus color="var(--color-primary)" />
+            <span>Nuevo producto</span>
+          </Button>
+        </div>
+      </header>
       <main className={style.tableContainer}>
         <PaginatedTable
           disableNextPageButton={data?.last}
