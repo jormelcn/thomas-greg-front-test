@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { MouseEventHandler, ReactNode } from "react";
 
 export interface IButtonProps {
-  loading: boolean;
+  loading?: boolean;
   disabled?: boolean;
   variant: "contained" | "text";
   className?: string;

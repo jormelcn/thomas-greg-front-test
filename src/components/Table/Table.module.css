@@ -8,6 +8,7 @@
   font-size: 0.9rem;
   position: relative;
   padding-top: 2.4rem;
+  box-sizing: border-box;
   background: var(--paper-background-color);
   overflow: visible;
 }
@@ -94,6 +95,7 @@
   text-align: left;
   white-space: nowrap;
   padding: 4px 6px;
+  box-sizing: border-box;
   transition: background 0.3s ease;
   flex-basis: 0px;
   height: 100%;

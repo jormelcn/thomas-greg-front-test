@@ -31,10 +31,10 @@ export function LoginPage() {
       if (result.isSuccess) {
         navigate("/admin");
       } else {
-        if (result.status == 403) {
+        if (result.status == 401) {
           alert("Error al iniciar sesión, verifica tu usuario y contraseña");
         } else {
-          alert("Lo sentimis, encontramos un inesperado en nuestros servicios");
+          alert("Lo sentimos, encontramos un inesperado en nuestros servicios");
         }
       }
     },

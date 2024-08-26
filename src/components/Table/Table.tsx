@@ -87,33 +87,36 @@ export function Table<T extends ITableRow>(props: ITableProps<T>) {
       className={style.root + (props.className ? ` ${props.className}` : "")}
     >
       <div className={style.head} style={{ left: `-${horizontalScroll}px` }}>
-        {tableInstance.headerGroups.map((headerGroup) => (
-          <div className={style.row} {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, j) => {
-              const headerProps = column.getHeaderProps();
-              return (
-                <ResizableWidth
-                  key={headerProps.key}
-                  className={style.headCellResizableContainer}
-                  width={props.columns[j].width}
-                  onWidthChange={(width) =>
-                    onColumnWidthChange(width, props.columns[j])
-                  }
-                  onChangeStop={() => onCellWidthChange(props.columns[j])}
-                  disabled={props.columns[j].resizeDisabled}
-                >
-                  <div
-                    {...headerProps}
-                    style={{ width: "100%", height: "100%" }}
-                    className={style.headCell}
+        {tableInstance.headerGroups.map((headerGroup) => {
+          const { key, ...__props } = headerGroup.getHeaderGroupProps();
+          return (
+            <div key={key} className={style.row} {...__props}>
+              {headerGroup.headers.map((column, j) => {
+                const {key, ...__props} = column.getHeaderProps();
+                return (
+                  <ResizableWidth
+                    key={key}
+                    className={style.headCellResizableContainer}
+                    width={props.columns[j].width}
+                    onWidthChange={(width) =>
+                      onColumnWidthChange(width, props.columns[j])
+                    }
+                    onChangeStop={() => onCellWidthChange(props.columns[j])}
+                    disabled={props.columns[j].resizeDisabled}
                   >
-                    {column.render("Header")}
-                  </div>
-                </ResizableWidth>
-              );
-            })}
-          </div>
-        ))}
+                    <div
+                      {...__props}
+                      style={{ width: "100%", height: "100%" }}
+                      className={style.headCell}
+                    >
+                      {column.render("Header")}
+                    </div>
+                  </ResizableWidth>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
       <AreaLoading loading={props.loading} className={style.areaLoading} />
       <div
@@ -130,15 +133,17 @@ export function Table<T extends ITableRow>(props: ITableProps<T>) {
             props.selectedCell?.rowId === rowId && style.selected,
             highlight && style[`${highlight.color}Highlighted`],
           ].filter((x) => x);
-
+          const { key, ...__props } = row.getRowProps();
           return (
-            <div className={rowClasses.join(" ")} {...row.getRowProps()}>
+            <div key={key} className={rowClasses.join(" ")} {...__props}>
               {row.cells.map((cell, j) => {
                 const cellWidth: number =
                   props.columns[j].cellWidth ?? props.columns[j].width;
+                const { key, ...__props } = cell.getCellProps();
                 return (
                   <div
-                    {...cell.getCellProps()}
+                    key={key}
+                    {...__props}
                     onClick={() =>
                       onCellClick({
                         rowId: (row.original as ITableRow).id,

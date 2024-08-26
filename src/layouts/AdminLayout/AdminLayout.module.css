@@ -9,6 +9,8 @@
   height: calc(100vh - var(--app-header-height));
   max-width: 100%;
   overflow: hidden;
+  background: rgb(218, 218, 218);
+  height: 100%;
 }
 
 @media (max-height: 800px) {
@@ -18,6 +20,7 @@
 }
 
 .sideBarContainer {
+  background: var(--color-paper);
   grid-area: aside;
   /* border-right: solid 1px var(--default-border-color); */
   display: flex;
@@ -34,4 +37,18 @@
   overflow-y: auto;
   padding: var(--main-container-padding);
   max-height: calc(100vh - var(--app-header-height));
+}
+
+.noLogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.noLogin > * {
+  text-align: center;
+  width: 95%;
+  max-width: 20rem;
 }

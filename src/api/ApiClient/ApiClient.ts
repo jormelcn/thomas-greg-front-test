@@ -11,7 +11,10 @@ export default class ApiClient {
     );
   }
 
-  public formatApiPath(path: string): string {
+  public formatApiPath(
+    path: string,
+    query?: { [key: string]: string | number }
+  ): string {
     const baseUrl =
       this.config.baseUrl.startsWith("http://") ||
       this.config.baseUrl.startsWith("https://")
@@ -26,6 +29,11 @@ export default class ApiClient {
         urlObj.searchParams.append(key, this.config.includeQuery[key]);
       }
     }
+    if (query) {
+      for (const key in query) {
+        urlObj.searchParams.append(key, "" + query[key]);
+      }
+    }
     return urlObj.toString();
   }
 
@@ -37,6 +45,7 @@ export default class ApiClient {
     contentType,
     headers,
     parseResponseAs,
+    query,
   }: GenericRequest<object>): Promise<GenericApiResponse<S>> {
     method = method ?? "GET";
     contentType =
@@ -50,7 +59,7 @@ export default class ApiClient {
     if (this.config.apiKey) headers["ApiKeySecret"] = this.config.apiKey;
     if ((method == "POST" || method == "PUT") && contentType)
       headers["Content-Type"] = contentType;
-    const url = this.formatApiPath(route);
+    const url = this.formatApiPath(route, query);
     try {
       const response = await fetch(url, {
         method,
@@ -79,8 +88,8 @@ export default class ApiClient {
         isNetworkError: false,
         body: responseBody,
       };
-    } catch(error) {
-      console.error(error)
+    } catch (error) {
+      console.error(error);
       return {
         status: null,
         isSuccess: false,

@@ -1,5 +1,5 @@
 import { Table, ITableProps, ITableRow } from "../Table";
-import styles from "./PaginatedTable.module.css";
+import style from "./PaginatedTable.module.css";
 import {
   PaginatedTableIndex,
   IPaginatedTableIndexProps,
@@ -20,10 +20,10 @@ export function PaginatedTable<T extends ITableRow>(
     ...tableProps
   } = props;
   return (
-    <div className={styles.root + (className ? ` ${className}` : "")}>
-      <Table {...tableProps} className={styles.table} />
+    <div className={style.root + (className ? ` ${className}` : "")}>
+      <Table {...tableProps} className={style.table} />
       <PaginatedTableIndex
-        className={styles.index}
+        className={style.index}
         loading={props.loading}
         currentPage={props.currentPage}
         onPageChange={onPageChange}
