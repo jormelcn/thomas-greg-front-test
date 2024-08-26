@@ -1,4 +1,4 @@
 
 export function AdminHomePage() {
-  return <div></div>
+  return <div>Admin</div>
 }
