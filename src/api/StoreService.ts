@@ -6,7 +6,10 @@ import ApiClient from "./ApiClient/ApiClient";
 import { GenericApiResponse } from "./ApiClient/GenericApiResponse";
 import { AdminSearchProductsRequestDTO } from "./customDTOs";
 import {
+  AdminCreateProductRequestDTO,
+  AdminUpdateProductRequestDTO,
   PageDTOProductForAdminDTO,
+  ProductForAdminDTO,
   SuccessSignInDTO,
   UserSignInRequestDTO,
 } from "./dtos";
@@ -79,6 +82,26 @@ export class StoreService {
       method: "GET",
       route: "admin/products",
       query: req,
+    });
+  }
+
+  async updateProduct(
+    req: AdminUpdateProductRequestDTO
+  ): Promise<GenericApiResponse<ProductForAdminDTO>> {
+    return this.client.request<ProductForAdminDTO>({
+      method: "PUT",
+      route: `admin/products/${req.id}`,
+      body: req,
+    });
+  }
+
+  async createProduct(
+    req: AdminCreateProductRequestDTO
+  ): Promise<GenericApiResponse<ProductForAdminDTO>> {
+    return this.client.request<ProductForAdminDTO>({
+      method: "POST",
+      route: `admin/products`,
+      body: req,
     });
   }
 }
