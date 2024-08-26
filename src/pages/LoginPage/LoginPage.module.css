@@ -1,0 +1,22 @@
+.page {
+  display: flex;
+  width: 100vw;
+  min-height: 100lvh;
+  justify-content: center;
+  align-items: center;
+  background: rgb(218, 218, 218);
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 20rem;
+  box-sizing: border-box;
+  height: fit-content;
+  padding: 1rem;
+  background: var(--color-paper);
+}
+
+.form {
+
+}
+

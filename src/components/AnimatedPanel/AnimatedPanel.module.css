@@ -1,0 +1,93 @@
+.root {
+  --animated-panel-header-height: 2rem;
+  width: 20rem;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  background: var(--color-light);
+  z-index: 10;
+}
+
+.root.left {
+  left: -20rem;
+  right: none;
+  transition: left 0.3s ease;
+  border-right: 1px solid var(--default-border-color);
+  border-left: none;
+}
+
+.root.left.open {
+  left: 0;
+}
+
+.root.left.open.doubleExpand {
+  left: 20rem;
+}
+
+.root.right {
+  left: none;
+  right: -20rem;
+  transition: right 0.3s ease;
+  border-right: none;
+  border-left: 1px solid var(--default-border-color);
+}
+
+.root.right.open {
+  right: 0;
+}
+
+.root.right.open.doubleExpand {
+  right: 20rem;
+}
+
+.root > header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: var(--animated-panel-header-height);
+  width: 100%;
+  text-align: right;
+  padding: 0.5rem 1rem;
+}
+
+.root.right > header {
+  right: none;
+  left: 0;
+  text-align: left;
+}
+
+.root > main {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.root > main::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.root > main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.root > main::-webkit-scrollbar-thumb {
+  background-color: #c4c4c4;
+  border-radius: 0.5rem;
+  position: relative;
+}
+
+.closeButton {
+  height: 1.7rem;
+  width: 1.7rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 0.2rem;
+}
+
+.root.right .closeButton {
+  transform: rotate(180deg);
+}
+
+.closeButton:hover {
+  background: var(--color-light-dark);
+}
